@@ -8,9 +8,6 @@ This project explores the use of transfer learning on Convolutional Neural Netwo
 
 This READEME outlines the conceptual baseline of how the CNN utilizes the mel-spectrogram, data description, model architecture and training, results, and next steps.
 
-### Results Preview
-
-
 ### Motivation
 Automatic genre prediction is an important problem in the music information retrieval (MIR) space. Having an accurate genre prediction model is useful for building music recommender systems. On platforms such as Spotify and Apple Music, being able to accurately predict the genres that a user listens to allows us to recommend songs of the same type to the user. 
 
@@ -65,9 +62,9 @@ For both of the following approaches we tried, we split the data into training, 
 
 ![model_2](./Images/model_2.png)
 
-The first (Figure 4) approach we tried was directly using VGGish as an embedding model. We embedded all of the songs in the dataset as size 31 * 128 = 3,968 vectors. We then tried a few models on the embedded vectors a three of which were: SVM, RandomForest, and XGBoost. The results are shown in the next section. We also tried a PCA of size 128 on the embedded vectors first, before feeding them to a classifier. We hypothesized that the embedding model would help classification accuracy by reducing the dimension of the original input from over 1.3 million to 3,968, which is much more manageable for classification algorithms. We hypothesized that because VGGish is trained on audio, it will find an efficient latent representation of our data that would be better than just naively doing a PCA and then running a classification algorithm. Indeed, the results in the next section show that this hypothesis was correct.
+The first (Figure 4) approach we tried was directly using VGGish as an embedding model. This work was done within [torch_transfer.ipynb](https://github.com/Ttantivi/genre_pred/blob/main/Notebooks/torch_transfer.ipynb). We embedded all of the songs in the dataset as size 31 * 128 = 3,968 vectors. We then tried a few models on the embedded vectors a three of which were: SVM, RandomForest, and XGBoost. The results are shown in the next section. We also tried a PCA of size 128 on the embedded vectors first, before feeding them to a classifier. We hypothesized that the embedding model would help classification accuracy by reducing the dimension of the original input from over 1.3 million to 3,968, which is much more manageable for classification algorithms. We hypothesized that because VGGish is trained on audio, it will find an efficient latent representation of our data that would be better than just naively doing a PCA and then running a classification algorithm. Indeed, the results in the next section show that this hypothesis was correct. 
 
-The second (Figure 5) approach that we tried was finetuning the VGGish model to our dataset. We added one hidden layer of shape (3968,  256), and an output layer of shape (256, 8). We computed the softmax of the output layer to get a probability distribution over the 8 genres, and took the argmax as our prediction. 
+The second (Figure 5) approach that we tried was finetuning the VGGish model to our dataset. We added one hidden layer of shape (3968,  256), and an output layer of shape (256, 8). We computed the softmax of the output layer to get a probability distribution over the 8 genres, and took the argmax as our prediction. This work was done within [torch_transfer_GPU.ipynb](https://github.com/Ttantivi/genre_pred/blob/main/Notebooks/torch_transfer_GPU.ipynb).
 
 We trained this neural network for 11 epochs, using a batch size of 8. We used the ADAM optimizer with default parameters and vanilla cross-entropy loss. Fine-tuning the VGGish PyTorch port for our task required significant programming effort. The port lacked native support for our necessary steps, particularly batch training. Originally designed for retrieving audio embeddings, it was not optimized for fine-tuning. To address this, we defined a custom data loader that handled the batch preprocessing steps. Additionally, we implemented a training loop to perform the fine-tuning of our model. These steps allowed us to overcome the limitations of the PyTorch port and successfully fine-tune the VGGish architecture for our specific task. 
 
