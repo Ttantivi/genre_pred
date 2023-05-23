@@ -1,2 +1,2 @@
-# genre_pred
+# Genre_Pred
 Predicting song genres using CNNs.
