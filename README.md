@@ -1,7 +1,7 @@
 # Genre_Pred
 This project was done in collaboration with Jeffrey Kuo, Bryan Wang, and Tessa Weiss at the University of California, Berkeley for Stat 254. Please note that the following is a simplified overview, and further information can be found in [Method_Details.pdf](https://github.com/Ttantivi/genre_pred/blob/main/Method_Details.pdf)
 
-Thie project builds upon the work of [fma](https://github.com/mdeff/fma) and [torchvggish](https://github.com/harritaylor/torchvggish).
+This project builds upon the work of [fma](https://github.com/mdeff/fma) and [torchvggish](https://github.com/harritaylor/torchvggish).
 
 ## Central Goal and Project Introduction
 The goal of our project was to reproduce state-of-the-art results in genre classification by utilizing convolutional neural networks (CNNs). We compared two different techniques to see which performed better: using a pretrained CNN (VGGish) as an embedding model for other classification models (SVM + XGBoost), and finetuning the pretrained CNN with additional layers for classifications.
@@ -31,3 +31,18 @@ A mel-spectrogram is essentially an image that is created from an audio file, wh
 Thus, even 30 seconds of audio will constitute an array of about 1.3 million floats. This input is too high-dimensional for most conventional models to handle, including feedforward neural networks. Even models built to handle time dependency, such as transformers or recurrent neural networks, will perform sub-optimally because of the sheer length that possible dependencies can take. Figure 1 shows an example of a mel-spectrogram.
 
 ![mel_spectrogram_ex](./Images/mel_spectrogram_ex.png)
+
+Image credit goes to [Ketan D.](https://towardsdatascience.com/audio-deep-learning-made-simple-part-2-why-mel-spectrograms-perform-better-aad889a93505).
+
+## Data and Preprocessing
+The Free Music Archive ([FMA](https://github.com/mdeff/fma)) is a large and diverse dataset of high-quality, legal audio recordings, which is freely available for research and educational purposes. It contains over 106,000 tracks from various genres and cultures, ranging from classical to experimental to hip-hop, and is organized into various subsets and metadata that allow for easy access and exploration.
+
+For this project, we used the "small" partition of the FMA dataset, which contains exactly 8,000 songs. The genres present in this dataset are: "Hip-Hop", "Pop", "Folk", "Experimental", "Rock", "International", "Electronic", and "Instrumental". Each song constitutes 30 seconds of audio sampled at 44.1 kHz. There were six files that were corrupted and removed from dataset, leaving us with exactly 7,994 files. Figure 2 shows the number of times each genre is present in the dataset.
+
+![class_dist](./Images/class_dist.png)
+
+We used the preprocessing functions from the [sklearn-audio-transfer-learning repository](https://github.com/jordipons/sklearn-audio-transfer-learning) to create the mel-spectrograms. The repository implements standard functions for framing the data, applying a periodic Hann window to each frame and producing a mel-spectrogram. One difference between the implementation of mel-spectrogram in this repository versus the standard implementation of the HTK algorithm is that they represent the conversion from STFT to mel-spectrogram as a matrix multiplication. This increases the number of computations from num_fft multiplies per frame to num_fft^2 multiplies per frame, but has the attraction of being more general and easier to read.
+
+To make inputs compatible with the VGGish model, each song is downsampled to 16 kHz. In addition, each 0.96 seconds of audio is converted into one mel-spectrogram of size 96 by 64. Thus, for this dataset, each 30 second song is converted to a 3D tensor of mel-spectrograms of shape 31 x 96 x 64. The next section will discuss how the data is processed by the VGGish model as well as the two additional approaches we tried on top of the pretrained VGGish model.
+
+## VGGish Model Architecture and Training
