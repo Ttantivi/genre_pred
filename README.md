@@ -3,8 +3,8 @@ This project was done in collaboration with Jeffrey Kuo, Bryan Wang, and Tessa W
 
 This project builds upon the work of [fma](https://github.com/mdeff/fma) and [torchvggish](https://github.com/harritaylor/torchvggish).
 
-## Central Goal and Introduction
-This project explores the use of transfer learning on Convolutional Neural Networks (CNNs) to predict the genre of a song using mel-spectrograms. We employed Google's VGGish CNN architecture, which was ported to PyTorch, and trained the model using the Free Music Archive (FMA) small dataset. The objective was to predict the genre of a song given a raw mp3 file and improve upon the baseline accuracies presented in the original FMA analysis. Our findings show that transfer learning with CNNs on mel-spectrograms can accurately predict song genre with a relatively high degree of accuracy, achieving an accuracy of 56.75%, a 7.75 percentage point improvement. 
+## Introduction and Results Preview
+This project explores the use of transfer learning on Convolutional Neural Networks (CNNs) to predict the genre of a song using mel-spectrograms. We employed Google's [VGGish](https://github.com/tensorflow/models/tree/master/research/audioset/vggish) CNN architecture, which was ported to PyTorch, and trained the model using the Free Music Archive (FMA) small dataset. The objective was to predict the genre of a song given a raw mp3 file and improve upon the baseline accuracies presented in the original FMA analysis. Our findings show that transfer learning with CNNs on mel-spectrograms can accurately predict song genre with a relatively high degree of accuracy, achieving an accuracy of 56.75%, a 7.75 percentage point improvement. 
 
 This READEME outlines the conceptual baseline of how the CNN utilizes the mel-spectrogram, data description, model architecture and training, results, and next steps.
 
