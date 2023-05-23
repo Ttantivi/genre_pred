@@ -17,3 +17,17 @@ To mitigate these problems as much as possible, we decided to restrict the scope
 * [baseline_tim.ipynb](https://github.com/Ttantivi/genre_pred/blob/main/Notebooks/baseline_tim.ipynb): Reproduces FMA's baseline results.
 * [torch_transfer.ipynb](https://github.com/Ttantivi/genre_pred/blob/main/Notebooks/torch_transfer.ipynb): Uses CNN as feature extractor and runs traditional ML algorithms for prediction.
 * [torch_transfer_GPU.ipynb](https://github.com/Ttantivi/genre_pred/blob/main/Notebooks/torch_transfer_GPU.ipynb): Uses finetuned CNN as classifier for prediction.
+* [utils.py](https://github.com/Ttantivi/genre_pred/blob/main/utils.py): Helper functions from [fma](https://github.com/mdeff/fma).
+
+To reproduce our results, download the MP3 files from [fma](https://github.com/mdeff/fma), named *fma_small.zip*.
+
+## How CNNs and Mel-Spectrogram Work
+CNNs are a class of deep neural networks that have been successfully applied to various computer vision tasks. CNNs are designed to automatically extract and learn spatial features from images by using convolutional layers, pooling layers, and fully connected layers. In a CNN, the convolutional layers apply a set of learnable filters to the input image, which detect different features such as edges, corners, and textures. The pooling layers downsample the feature maps by reducing their spatial resolution while retaining the most important information. The fully connected layers then process the high-level features and produce the final output of the network. By stacking multiple convolutional layers, pooling layers, and fully connected layers, a CNN can learn increasingly complex representations of the input image, which makes it suitable for a wide range of visual recognition tasks.
+
+The reason why CNNs are so successful in music genre classification is because the audio recognition task is converted into a visual recognition task by utilizing mel-spectrograms. 
+
+A mel-spectrogram is essentially an image that is created from an audio file, which is is a one-dimensional array of floats. Each float represents a sample of the song at a particular time point. Every audio file also specifies a sample rate, which is the number of samples per second of audio. For example, Spotify uses mp3 files with a 44.1 kHz sample rate and 16-bit float precision. This means that there are 44,100 floats (in 16-bit precision) per second of audio in the song.
+    
+Thus, even 30 seconds of audio will constitute an array of about 1.3 million floats. This input is too high-dimensional for most conventional models to handle, including feedforward neural networks. Even models built to handle time dependency, such as transformers or recurrent neural networks, will perform sub-optimally because of the sheer length that possible dependencies can take. Figure 1 shows an example of a mel-spectrogram.
+
+![mel_spectrogram_ex](./Images/mel_spectrogram_ex.png)
